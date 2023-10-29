@@ -4,4 +4,6 @@ Bibliotecas usadas:
 - Pygame 2.5.2
 - time
 - os
-- Python 3.10.12
+
+
+Versão do Python: 3.10.12

@@ -9,6 +9,3 @@ root = Tk()
 RenderGui(root)
 #Mantém a janela aberta ouvindo eventos e só fecha ao fechar a janela
 root.mainloop()
-
-print("oi")
-print("oii123")

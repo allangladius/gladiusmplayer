@@ -11,3 +11,5 @@ RenderGui(root)
 root.mainloop()
 
 print("oi")
+print("oasoekase")
+print("oasoekase")

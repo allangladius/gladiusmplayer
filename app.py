@@ -11,3 +11,4 @@ RenderGui(root)
 root.mainloop()
 
 print("oi")
+print("oii123")

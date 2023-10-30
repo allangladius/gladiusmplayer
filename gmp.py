@@ -5,7 +5,6 @@ from tkinter import filedialog
 from tkinter import ttk
 from time import strftime, gmtime
 
-timeline_max = 0
 
 #Instanciando o Tk
 root = Tk()
@@ -16,7 +15,7 @@ root = root
 root.title("Gladius MPlayer")
 
 #Define as dimensões do Player
-root.geometry("1000x250+0+0")
+root.geometry("1000x250+200+200")
 
 #Impede redimensionamento na horizontal e vertical
 root.resizable(False, False)
@@ -77,12 +76,43 @@ buttonframe.rowconfigure(1, pad=50)
 # Define as dimensões do Container "Control Panel"
 buttonframe.place(x=0,y=100,width=600,height=200)
 
+# Variável global para rastrear se o usuário está arrastando o slider ou não
+dragging_slider = 0
+
+## Função para tratar o clique do mouse no slider principal
+def handle_slider_drag(event):
+   # Esta função é chamada sempre que o usuário arrasta o controle deslizante
+    if pygame.mixer.music.get_busy():
+        # Pausa a reprodução da música
+        pygame.mixer.music.pause()
 
 
 # Slider para Linha do tempo para mostrar o progresso da musica
 timeline_max = 0
 timeline_slider = ttk.Scale(buttonframe, from_=0, to=timeline_max, orient="horizontal", length=380)
 timeline_slider.grid(row=1, column=0, columnspan=4)
+
+# Função para tratar a liberação do botão do mouse no slider principal
+def handle_slider_release(event):
+    if pygame.mixer.music.get_busy():
+        # Obtém o valor do slider após o lançamento do botão do mouse
+        position = timeline_slider.get()
+
+        # Converte a posição para segundos
+        position_seconds = int(position)
+
+        # Define a posição da música para o valor do slider
+        pygame.mixer.music.set_pos(position_seconds / timeline_max)
+
+        # Continua a reprodução a partir da nova posição
+        pygame.mixer.music.unpause()
+
+# Vincula função ao evento de liberação do botão do mouse no slider principal
+timeline_slider.bind("<ButtonRelease-1>", handle_slider_release)
+
+# Vinculando a função de clique no slider ao slider principal
+timeline_slider.bind("<Button-1>", handle_slider_drag)
+
 
 def songprogress():
 
@@ -137,8 +167,12 @@ def playsong():
     #Captura o tamanho da música
     song_length = pygame.mixer.Sound(playlist.get(ACTIVE)).get_length()
 
+    # Atualiza o valor máximo do slider para o comprimento da música, o quanto ela dura.
     timeline_max = int(song_length)
+    timeline_slider.config(to=timeline_max)
+
     status.set("-Playing")
+ 
     #Chama o modulo mixer.music do pygame para dar play()
     pygame.mixer.music.play()
     songprogress()
@@ -225,7 +259,7 @@ def addmusic():
         songs = os.listdir(path)
 
         for song in songs:
-            if song.endswith(".mp3"):
+            if song.endswith(".mp3") or song.endswith(".wav") or song.endswith(".ogg"):
                 playlist.insert(END, song)
 
 btnopenfolder = Button(songsframe, 

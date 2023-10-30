@@ -14,16 +14,21 @@ root = Tk()
 root = root
 #Define o titulo do Player
 root.title("Gladius MPlayer")
+
 #Define as dimensões do Player
 root.geometry("1000x250+0+0")
+
 #Impede redimensionamento na horizontal e vertical
 root.resizable(False, False)
+
 #Inicializa os módulos do Pygame junto com o módulo mixer
 pygame.init()
 pygame.mixer.init()
+
 # StringVar permite definir um valor de texto para recuperar quando for necessário(Usando .set para alterar e .get para puxar)
 track = StringVar()
 status = StringVar()
+
 # Container pai que exibe os rótulos(nome da música e o status da música) em uma determinada área da borda
 trackframe = LabelFrame(root, 
                         text="Song Track", 
